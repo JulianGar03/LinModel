@@ -1,0 +1,133 @@
+---
+title: "linear model for 1980 cars"
+author: "Julian Garcia"
+date: "Fall 2026"
+output:
+   html_document:
+         toc: true
+         toc_depth: 5
+        
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Read about the data from the website where it is staged.  
+
+Form three regression models; 
+  Model1 is mpg~disp, 
+  Model2 is mpg~hp, and 
+  Model3 is mpg~disp+hp. 
+  
+For each model find a 95% prediction interval of mpg given a value of 183 for disp and 250 hp. 
+
+After all three models have been constructed, compare Model1 with Model3 using anova. Document the comparison the markdown document, 
+
+As usual, push the project up to your github account and submit the URL to canvas as link. 
+
+ 
+
+
+```{r include=FALSE}
+require(tidyverse)
+require(tigerstats)
+require(rgl)
+require(knitr)
+library(MASS)
+
+```
+
+```{r}
+data(mtcars)
+myData=mtcars
+
+```
+
+## Model 1 mpg ~ disp
+
+### scatterplot
+```{r}
+plot(mpg~disp,data=mtcars,pch=19)
+```
+This scatter plot shows that as disp increased, mpg decreases
+### Numerical results
+```{r}
+#mtcars$mpg
+cor(mtcars$mpg, mtcars$disp)
+```
+
+### Inferential  (Build model.1)
+```{r}
+model.1 <- lm(mpg~disp,data=mtcars)
+summary.lm(model.1)
+```
+#### Predict at target point
+```{r}
+newdata=data.frame(disp=183,hp=250)
+predict(model.1,newdata)
+```
+  
+
+## Model 2 mpg~hp
+### scatterplot
+```{r}
+plot(mpg~hp,data=mtcars,pch=19)
+```
+
+This scatter plot shows that as disp increased, mpg decreases
+### Numerical results
+```{r}
+#mtcars$mpg
+cor(mtcars$mpg, mtcars$hp)
+```
+
+### Inferential  (Build model.1)
+```{r}
+model.2 <- lm(mpg~hp,data=mtcars)
+summary.lm(model.2)
+```
+
+#### Predict at target point
+```{r}
+newdata=data.frame(disp=183,hp=250)
+predict(model.1,newdata)
+```
+
+```{r}
+newdata=data.frame(disp=183,hp=250)
+predict(model.2,newdata)
+```
+### Now add in scatterplot
+
+
+### Numerical results 
+
+
+### Inferential  (Build model.2)
+  
+
+#### predict model.2 at target point
+
+#### now add the model fit to our plot for model.2
+  
+
+
+## Model 3 SIM~ARM+GRIP
+
+### Numerical results (cor)
+
+`
+  
+### Inferential  (Build 2-dimentional model.3)
+
+#### predict model.3 at target point
+  
+
+## Comparing nested models ANOVA Test
+
+### Model.1 vs Model.3
+### Model.2 vs Model.3
+
+## How do the models compare (Model.1 with model.2 in the anova results)?
+
