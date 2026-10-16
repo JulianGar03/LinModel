@@ -1,133 +1,165 @@
 ---
-title: "linear model for 1980 cars"
+title: "Linear Model with Prediction"
 author: "Julian Garcia"
-date: "Fall 2026"
-output:
-   html_document:
-         toc: true
-         toc_depth: 5
-        
+date: "`Fall 2026`"
+output: html_document
 ---
+
+This project is an exploration of linear models. Models are estimated by linear regression.  The data set is from Motor Trend magazine.
+
+The assignment is based on estimation of 3 models:
+1. mpg as a function of cyl
+2. mpg as a function of disp
+3  mpg as a function of both cyl and disp
+
+Complete a linear model with data descripton, a model fit a, and a prediction of mpg based on weigth of 3050 lbs, with a displacement of 122 cubic inches (this is 2.5 L).
+
+use an anova to compare model 2 with model 3
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
-Read about the data from the website where it is staged.  
-
-Form three regression models; 
-  Model1 is mpg~disp, 
-  Model2 is mpg~hp, and 
-  Model3 is mpg~disp+hp. 
-  
-For each model find a 95% prediction interval of mpg given a value of 183 for disp and 250 hp. 
-
-After all three models have been constructed, compare Model1 with Model3 using anova. Document the comparison the markdown document, 
-
-As usual, push the project up to your github account and submit the URL to canvas as link. 
-
- 
-
-
-```{r include=FALSE}
-require(tidyverse)
-require(tigerstats)
-require(rgl)
-require(knitr)
-library(MASS)
-
-```
+# Load the dataset (built-in)
 
 ```{r}
 data(mtcars)
-myData=mtcars
-
 ```
 
-## Model 1 mpg ~ disp
 
-### scatterplot
+# View first 6 rows and summary
 ```{r}
-plot(mpg~disp,data=mtcars,pch=19)
+head(mtcars)
 ```
-This scatter plot shows that as disp increased, mpg decreases
-### Numerical results
+
+
+
+# Model 1:
+
+ mpg (miles per gallon) is the response (Y)
+ wt (wt) is the predictor (X)
+
+## data summary
+### graphical summary
 ```{r}
-#mtcars$mpg
+plot(mpg ~ wt, data = mtcars, pch = 19)
+```
+
+This scatter plot shows that as weight (wt) increases, mpg decreases. The plot shows a strong negative relationship between weight and mpg.
+
+### numerical summary
+```{r}
+cor(mtcars$mpg, mtcars$wt)
+```
+The correlation is -0.868, which shows a strong negative relationship between weight and mpg. As weight increases, mpg tends to decrease.
+### model summary
+
+
+```{r}
+model1 <- lm(mpg ~ wt, data = mtcars)
+
+summary(model1)
+```
+
+
+# Model 2:
+
+
+ mpg (miles per gallon) is the response (Y)
+ wt (wt) is the predictor (X)
+
+## data summary
+
+### graphical summary
+```{r}
+plot(mpg ~ disp, data = mtcars, pch = 19)
+```
+
+This scatter plot shows that as displacement (disp) increases, mpg decreases. The plot shows a strong negative relationship between displacement and mpg.
+
+### numerical summary
+```{r}
 cor(mtcars$mpg, mtcars$disp)
 ```
 
-### Inferential  (Build model.1)
-```{r}
-model.1 <- lm(mpg~disp,data=mtcars)
-summary.lm(model.1)
-```
-#### Predict at target point
-```{r}
-newdata=data.frame(disp=183,hp=250)
-predict(model.1,newdata)
-```
-  
+### model summary
 
-## Model 2 mpg~hp
-### scatterplot
-```{r}
-plot(mpg~hp,data=mtcars,pch=19)
-```
-
-This scatter plot shows that as disp increased, mpg decreases
-### Numerical results
-```{r}
-#mtcars$mpg
-cor(mtcars$mpg, mtcars$hp)
-```
-
-### Inferential  (Build model.1)
-```{r}
-model.2 <- lm(mpg~hp,data=mtcars)
-summary.lm(model.2)
-```
-
-#### Predict at target point
-```{r}
-newdata=data.frame(disp=183,hp=250)
-predict(model.1,newdata)
-```
 
 ```{r}
-newdata=data.frame(disp=183,hp=250)
-predict(model.2,newdata)
+model2 <- lm(mpg ~ disp, data = mtcars)
+summary(model2)
 ```
-### Now add in scatterplot
 
 
-### Numerical results 
+# Model 3 :
+
+ mpg (miles per gallon) is the response (Y)
+ wt and disp are the predictors (X's)
+
+## data summary
+### graphical summary
+```{r}
+plot(mpg ~ wt+disp, data = mtcars)
+```
+
+This plot shows that as weight (wt) and displacement (disp) increase, mpg generally decreases. The plots show a strong negative relationship between the predictors and mpg.
+### numerical summary
+```{r}
+cor(mtcars[, c("mpg", "wt", "disp")])
+```
+The numerical summary shows that mpg has a strong negative relationship with both weight (wt) and displacement (disp). Weight and displacement also have a strong positive relationship with each other.
+
+### model summary
+
+model3= lm(mpg ~ wt+disp, data = mtcars)
+model summary (coefficients, R², etc.), summarize the fit
+
+```{r}
+model3= lm(mpg ~ wt+disp, data = mtcars)
+summary(model3)
+```
+ mpg (miles per gallon) is the response (Y)
+ wt (wt) and displacement (disp) are the predictors (X's)
+
+## data summary
+
+### graphical summary
+```{r}
+plot(mpg ~ wt+disp, data=mtcars)
+```
+
+The plots show that as weight (wt) and displacement (disp) increase, mpg generally decreases. Both plots show a strong negative relationship between the predictors and mpg.
+
+### numerical summary
+```{r}
+cor(mtcars[, c("mpg", "wt", "disp")])
+```
+
+### model summary
+```{r}
+model3 <- lm(mpg ~ wt + disp, data = mtcars)
+summary(model3)
+```
 
 
-### Inferential  (Build model.2)
-  
-
-#### predict model.2 at target point
-
-#### now add the model fit to our plot for model.2
-  
+# anova: compare models 2 and 3
+```{r}
+anova(model2, model3)
+```
 
 
-## Model 3 SIM~ARM+GRIP
+model3 <- lm(mpg ~ wt+disp, data = mtcars)
 
-### Numerical results (cor)
+model summary (coefficients, R², etc.)
 
-`
-  
-### Inferential  (Build 2-dimentional model.3)
+```{r}
+summary(model3)
+```
 
-#### predict model.3 at target point
-  
+```{r}
+anova_result <- anova(model1, model3)
+print(anova_result)
+```
 
-## Comparing nested models ANOVA Test
+# Discussion/Conclustions
 
-### Model.1 vs Model.3
-### Model.2 vs Model.3
-
-## How do the models compare (Model.1 with model.2 in the anova results)?
-
+Overall, weight (wt) appears to be the better predictor of mpg. Both weight and displacement have strong negative relationships with mpg, but when both predictors are included in Model 3, weight is statistically significant while displacement is not. The ANOVA comparisons also show that adding weight to the displacement model significantly improves the model, while adding displacement to the weight model does not significantly improve it. Therefore, Model 1 using weight alone is the preferred model because it is simpler and still explains a large amount of the variation in mpg.
